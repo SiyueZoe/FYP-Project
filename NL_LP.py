@@ -1,4 +1,4 @@
-# NP_LP - the LP solution for Non-Interruptable type load
+# NL_LP - the LP solution for Non-Interruptable type load
 # Input:
 #      dt - the time step [scalar]
 #      p - the array of prices from p_b, ..., p_e [array with shape (e-b+1,)]
@@ -12,7 +12,7 @@ import numpy as np
 from scipy.linalg import toeplitz
 from scipy import optimize
 
-def NP_LP(dt, p, L, P):
+def NL_LP(dt, p, L, P):
     # N - the number of variables
     N = len(p)
     # c - array of costs for LP
