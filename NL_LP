@@ -25,13 +25,13 @@ def NP_LP(dt, p, L, P):
     
     # A_ub - the matrix for inequality constraints 
     # construct a band matrix corresponding to noninterruptability constraints (the continuous duration of 'on' load status >= L)
-    first_column = np.concatenate(([[-L]], np.zeros((N-L-1,1), dtype=int)))
-    first_row = np.concatenate(([-L], [L-1], -np.ones((L-1,), dtype=int), np.zeros((N-L-1,), dtype=int)))
+    first_column = np.concatenate(([[L-1]], [[-L]], np.zeros((N-L-1,1), dtype=int)))
+    first_row = np.concatenate(([L-1], -np.ones((L-1,), dtype=int), np.zeros((N-L,), dtype=int)))
     A_ub = toeplitz(first_column, first_row)
     # add identity matricies corresponding to variable bounds (0 <= x <= P)
-    A_ub = np.concatenate((A_ub, np.eye(N), -np.eye(N)))
-    # construct the inequality constraints vector (the continuous duration >= L; 0 <= x <= P) 
-    b_ub = np.concatenate((np.zeros((N-L,1), dtype=int), P*np.ones((N,1), dtype=int), np.zeros((N,1), dtype=int)))
+    A_ub = np.concatenate((A_ub, -np.eye(N), np.eye(N)))
+    # construct the inequlity constraints vector (the continuous duration >= L; 0 <= x <= P) 
+    b_ub = np.concatenate((np.zeros((2*N-L+1,1), dtype=int), P*np.ones((N,1), dtype=int)))
     # find the LP solution
     solution = optimize.linprog(c, A_ub, b_ub, A_eq, b_eq, method='simplex')
     # the value of objective function
