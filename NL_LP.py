@@ -1,7 +1,7 @@
 # NL_LP - the LP solution for Non-Interruptable type load
 # Input:
 #      dt - the time step [scalar]
-#      p - the array of prices from p_b, ..., p_e [array with shape (e-b+1,)]
+#      pr - the array of prices from p_b, ..., p_e [array with shape (e-b+1,)]
 #      L - the duration of the task [scalar]
 #      P - the power rate [scalar]
 # Output:
@@ -12,11 +12,11 @@ import numpy as np
 from scipy.linalg import toeplitz
 from scipy import optimize
 
-def NL_LP(dt, p, L, P):
+def NL_LP(dt, pr, L, P):
     # N - the number of variables
-    N = len(p)
+    N = len(pr)
     # c - array of costs for LP
-    c = N*dt*p
+    c = N*dt*pr
     # A_eq, b_eq - the matrix and the vector for equality constraints  
     # A_eq - the array of ones corresponding to the total duration of 'on' load status throughout the scheduling horizon = L
     A_eq = np.ones((1,N), dtype=int)
