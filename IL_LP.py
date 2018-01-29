@@ -15,6 +15,8 @@ from scipy import optimize
 def IL_LP(dt, pr, P, E):
     # N - the number of variables
     N = len(pr)
+    
+    ### Objective function
     # c - the vector of costs for a LP problem
     c = N * dt * pr
 #    c = dt * pr
