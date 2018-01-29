@@ -24,7 +24,7 @@ def IL_LP(dt, pr, P, E):
     ### Equality constraints   
     #  A_eq - the matrix for equality constraints
     # A_eq - the array of ones corresponding to the total load consumption throughout the scheduling horizon = E
-    A_eq = np.ones((1,N))
+    A_eq = np.ones((1,N), dtype=int)
     # b_eq - the vector for equality constraints
     b_eq = E / (dt*N)
     
@@ -38,8 +38,8 @@ def IL_LP(dt, pr, P, E):
     A_ub = np.concatenate((bound_up, bound_low))
     # b_ub - the vector for inequality constraints
     # b_bound_up - the vector correspond to upper bounds; b_bound_low - the vector correspond to lower bounds;
-    b_bound_up = P*np.ones((N,1))
-    b_bound_low = np.zeros((N,1))
+    b_bound_up = P*np.ones((N,1), dtype=int)
+    b_bound_low = np.zeros((N,1), dtype=int)
     # construct the sub-vector of b_ub corresponding to upper and lower bounds
     b_ub = np.concatenate((b_bound_up, b_bound_low))
     
