@@ -41,7 +41,7 @@ def IL_LP(dt, pr, P, E):
     b_bound_up = P*np.ones((N,1))
     b_bound_low = np.zeros((N,1))
     # construct the sub-vector of b_ub corresponding to upper and lower bounds
-    b_up = np.concatenate((b_bound_up, b_bound_low))
+    b_ub = np.concatenate((b_bound_up, b_bound_low))
     
     ## LP solution
     solution = optimize.linprog(c, A_ub, b_ub, A_eq, b_eq, method='simplex')
