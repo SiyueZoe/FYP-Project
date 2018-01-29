@@ -24,7 +24,7 @@ def IL_LP(dt, pr, P, E):
     ### Equality constraints   
     #  A_eq - the matrix for equality constraints
     # A_eq - the array of ones corresponding to the total load consumption throughout the scheduling horizon = E
-    A_eq = np.ones(N, dtype=int)
+    A_eq = np.ones((1,N), dtype=int)
     # b_eq - the vector for equality constraints
     b_eq = E / (dt*N)
     
