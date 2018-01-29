@@ -18,7 +18,7 @@ def IL_LP(dt, pr, P, E):
     
     ### Objective function
     # c - the vector of costs for a LP problem
-    c = N * dt * pr
+    c = dt * pr
 #    c = dt * pr
 
     ### Equality constraints   
@@ -26,7 +26,7 @@ def IL_LP(dt, pr, P, E):
     # A_eq - the array of ones corresponding to the total load consumption throughout the scheduling horizon = E
     A_eq = np.ones((1,N), dtype=int)
     # b_eq - the vector for equality constraints
-    b_eq = E / (dt*N)
+    b_eq = E / dt
     
     ### Inequality constraints
     ## Upper and lower bound for each variable
