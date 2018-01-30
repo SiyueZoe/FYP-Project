@@ -20,7 +20,7 @@ def IL_LP(dt, pr, P, E, T_off):
     
     ### Objective function
     # c1 - the sub-vector of c corresponding to power statuses 
-    c1 = N* dt * pr
+    c1 = dt * pr
     # c2 - the sub-vector of c corresponding to ancillary binary variables
     c2 = np.zeros(N)
     c = np.concatenate((c1, c2))
@@ -31,7 +31,7 @@ def IL_LP(dt, pr, P, E, T_off):
     # supplemented by the array of zeros corresponding to ancillary binary variables
     A_eq = np.concatenate((np.ones((1,N), dtype=int), np.zeros((1,N), dtype=int)), axis=1)
     # b_eq - the vector for equality constraints
-    b_eq = E / (dt*N)
+    b_eq = E / dt
     
     ### Inequality constraints
     ## Upper and lower bound for each variable
