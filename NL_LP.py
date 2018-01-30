@@ -16,7 +16,7 @@ def NL_LP(dt, p, L, P):
     # N - the number of variables
     N = len(p)
     # c - array of costs for LP
-    c = N*dt*p
+    c = dt*p
     # A_eq, b_eq - the matrix and the vector for equality constraints  
     # A_eq - the array of ones corresponding to the total duration of 'on' load status throughout the scheduling horizon = L
     A_eq = np.ones((1,N), dtype=int)
