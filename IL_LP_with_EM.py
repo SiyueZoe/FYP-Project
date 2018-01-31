@@ -17,22 +17,22 @@ from scipy import optimize
 def IL_LP(dt, pr, P, E, T_off):
     # N - the number of variables
     N = len(pr)
-    
+
     ### Objective function
     # c1 - the sub-vector of c corresponding to power statuses 
     c1 = dt * pr
     # c2 - the sub-vector of c corresponding to ancillary binary variables
     c2 = np.zeros(N)
     c = np.concatenate((c1, c2))
-    
+
     ### Equality constraints   
     # A_eq - the matrix for equality constraints
     # A_eq - the array of ones corresponding to the total load consumption throughout the scheduling horizon = E
     # supplemented by the array of zeros corresponding to ancillary binary variables
-    A_eq = np.concatenate((np.ones((1,N), dtype=int), np.zeros((1,N), dtype=int)), axis=1)
+    A_eq = np.concatenate((np.ones((1, N), dtype=int), np.zeros((1, N), dtype=int)), axis=1)
     # b_eq - the vector for equality constraints
     b_eq = E / dt
-    
+
     ### Inequality constraints
     ## Upper and lower bound for each variable
     # A_bound_up - the matrix of upper bounds; A_bound_low - the matrix of lower bounds
@@ -44,19 +44,19 @@ def IL_LP(dt, pr, P, E, T_off):
     A_ub = np.concatenate((A_ub, np.zeros(A_ub.shape, dtype=int)), axis=1)
     # b_ub - the vector for inequality constraints
     # b_bound_up - the vector correspond to upper bounds; b_bound_low - the vector correspond to lower bounds;
-    b_bound_up = P*np.ones((N,1), dtype=int)
-    b_bound_low = np.zeros((N,1), dtype=int)
+    b_bound_up = P * np.ones((N, 1), dtype=int)
+    b_bound_low = np.zeros((N, 1), dtype=int)
     # construct the sub-vector of b_ub corresponding to upper and lower bounds
     b_ub = np.concatenate((b_bound_up, b_bound_low))
-    print(A_ub.shape)
-    print(b_ub.shape)
-    ## Ancillary minimum off-time constaints\
+
+    ## Ancillary minimum off-time constaints
     # construct the matrix for inequalities
-    for i in range(T_off):
+    for i in range(T_off - 1):
         # construct the band matrix with elements 1; -1; (corresponding to the changing a switching-off) and
-        # 1 on the i-th possition (corresponding to a switching-on after i time steps)
-        first_column = np.concatenate(([[1]], np.zeros((N-T_off-i,1), dtype=int)))
-        first_row = np.concatenate(([1], [-1], np.zeros(i, dtype=int), [1], np.zeros(N-3-i, dtype=int)))
+        # 1 on the i-th position (corresponding to a switching-on after i time steps)
+        # first_column = np.concatenate(([[1]], np.zeros((N - T_off - i, 1), dtype=int)))
+        first_column = np.concatenate(([[1]], np.zeros((N - T_off - 1, 1), dtype=int)))
+        first_row = np.concatenate(([1], [-1], np.zeros(i, dtype=int), [1], np.zeros(N - 3 - i, dtype=int)))
         # A_ub_mt - the band matrix 
         A_ub_mt = toeplitz(first_column, first_row)
         # supplement A_ub_mt with additional zeros corresponding to power status variables
@@ -64,12 +64,18 @@ def IL_LP(dt, pr, P, E, T_off):
         # join to the A_ub
         A_ub = np.concatenate((A_ub, A_ub_mt))
     # construct the vector for inequalities
-    b_row_size = int((N-T_off)*T_off + (3-T_off)*T_off/2)
-    b_ub = np.concatenate((b_ub, np.ones((row_size,1), dtype=int)))
-    
+    b_row_size = int((N - T_off) * (T_off - 1))
+    b_ub = np.concatenate((b_ub, np.ones((b_row_size, 1), dtype=int)))
+    ## Connection between x and y constaints
+    # A_x - the coefficient matrix of x
+    A_x = np.eye(N, dtype=int)
+    # A_y - the coefficient matrix of y
+    A_y = -P * np.eye(N, dtype=int)
+    # A_xy - the coefficient matrix of the inequality
+    A_xy = np.concatenate((A_x, A_y), axis=1)
+    A_ub = np.concatenate((A_ub, A_xy))
+    b_ub = np.concatenate((b_ub, np.zeros((N, 1), dtype=int)))
     ### LP solution
-    print(A_ub.shape)
-    print(b_ub.shape)
     solution = optimize.linprog(c, A_ub, b_ub, A_eq, b_eq, method='simplex')
     # the value of objective function
     F = solution.fun
