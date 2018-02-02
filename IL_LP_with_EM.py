@@ -80,6 +80,5 @@ def IL_LP(dt, pr, P, E, T_off):
     # the value of objective function
     F = solution.fun
     # the optimal schedule
-    x = solution.x[0:N]
-    y = solution.x[N:2*N]
-    return [F, x, y]
+    x = solution.x
+    return F, x
