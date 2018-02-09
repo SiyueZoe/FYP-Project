@@ -10,33 +10,30 @@
 
 from gurobipy import *
 
-## Parameter Setting
-dt = 10
-pr = [100, 100, 5, 90, 5]
-L = 2
-P = 17
-# N - the number of variables
-N = len(pr)
-# x - the list of the variables
-x = [None] * N
 
-## Create a model
-m = Model("NL_MILP")
-# Create variables - x is binary, (P * x) is the actual variable value
-for i in range(N):
-    x[i] = m.addVar(vtype=GRB.BINARY)
-# Integrate new variables
-m.update()
-# Set objective
-m.setObjective(sum(pr[i] * P * x[i] for i in range(N)), GRB.MINIMIZE)
-# Add constraints
-for j in range(1, N - L + 1):
-    m.addConstr(sum(x[i] for i in range(j, j + L)) >= (x[j] - x[j - 1]) * L)
-m.addConstr(sum(x) == L)
-m.addConstr(sum(x[i] for i in range(L)) >= (x[0] * L))
+def NL_MILP(dt, pr, L, P):
+    # N - the number of variables
+    N = len(pr)
+    # x - the list of the variables
+    x = [None] * N
 
-## Optimize
-m.optimize()
-for v in m.getVars():
-    print(v.varName, (v.x) * P)
-print('Obj:', m.objVal)
+    ## Create a model
+    m = Model("NL_MILP")
+    # Create variables - x is binary, (P * x) is the actual variable value
+    for i in range(N):
+        x[i] = m.addVar(vtype=GRB.BINARY)
+    # Integrate new variables
+    m.update()
+    # Set objective
+    m.setObjective(sum(pr[i] * P * x[i] for i in range(N)), GRB.MINIMIZE)
+    # Add constraints
+    for j in range(1, N - L + 1):
+        m.addConstr(sum(x[i] for i in range(j, j + L)) >= (x[j] - x[j - 1]) * L)
+    m.addConstr(sum(x) == L)
+    m.addConstr(sum(x[i] for i in range(L)) >= (x[0] * L))
+
+    ## Optimize
+    m.optimize()
+    for v in m.getVars():
+        print(v.varName, (v.x) * P)
+    print('Obj:', m.objVal)
