@@ -35,7 +35,7 @@ for j in range(1, N - L + 1):
 m.addConstr(sum(x) == L)
 m.addConstr(sum(x[i] for i in range(L)) >= (x[0] * L))
 
-# Optimize
+## Optimize
 m.optimize()
 for v in m.getVars():
     print(v.varName, (v.x) * P)
