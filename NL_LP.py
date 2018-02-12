@@ -49,7 +49,7 @@ def NL_LP(dt, pr, L, P):
     # add identity matricies corresponding to variable bounds (0 <= x <= P)
     A_ub = np.concatenate((A_ub, A_ub_ni))
     # construct the inequlity constraints vector (the continuous duration >= L; 0 <= x <= P) 
-    b_ub = np.concatenate((b_ub, np.zeros((N-L+1,1), dtype=int))
+    b_ub = np.concatenate((b_ub, np.zeros((N-L+1,1), dtype=int)))
     # find the LP solution
     solution = optimize.linprog(c, A_ub, b_ub, A_eq, b_eq, method='simplex')
     # the value of objective function
