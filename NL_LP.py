@@ -18,7 +18,7 @@ def NL_LP(dt, pr, L, P):
     
     ### Objective function
     # c - array of costs for LP
-    c = N*dt*pr
+    c = dt*pr
     
     ### Equality constraints
     # A_eq, b_eq - the matrix and the vector for equality constraints  
