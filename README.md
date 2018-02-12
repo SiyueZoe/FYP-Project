@@ -1,5 +1,5 @@
-# FYP-Project (Change the name to 'Optimization methods for ???')
-Objective: Apply evolutionary computation or swarm intelligence algorithms to perform scheduling of smart grid resources (We do not concider resources). The work will be conducted using Matlab or Python. (Python only)
+# Optimization methods for load scheduling in smart grid
+Objective: Apply evolutionary computation or swarm intelligence algorithms to perform scheduling of smart grid appliances. The work will be conducted using Python.
 
 Nature of Project: Programming, Computational Intelligence 
 
