@@ -25,7 +25,7 @@ def NL_MILP(dt, pr, L, P):
     # Integrate new variables
     m.update()
     # Set objective
-    m.setObjective(sum(pr[i] * P * x[i] for i in range(N)), GRB.MINIMIZE)
+    m.setObjective(dt * sum(pr[i] * P * x[i] for i in range(N)), GRB.MINIMIZE)
     # Add constraints
     for j in range(1, N - L + 1):
         m.addConstr(sum(x[i] for i in range(j, j + L)) >= (x[j] - x[j - 1]) * L)
