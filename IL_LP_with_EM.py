@@ -5,19 +5,19 @@
 #       P - the power rate [scalar]
 #       E - the energy [scalar]
 #       T_off - the minimum off time [scalar]
-#       P_min - the minimum value to show that load is working
+#       small_const - small constant used in connecting three z variables 
 # Output:
 #       F - the value of objective function [scalar]
 #       x - the optimal schedule [array with shape (e-b+1,)]
 #       y - the optimal scheduling ancillary binary [array with shape (e-b+1,)]
-#       z - the optimal scheduling variables to help to achieve constraints [[array with shape 3 * (e-b+1,)]]
+#       z - the optimal scheduling variables to help in achieving constraints [[array with shape 3 * (e-b+1,)]]
 
 import numpy as np
 from scipy.linalg import toeplitz
 from scipy import optimize
 
 
-def IL_LP(dt, pr, P, E, T_off, P_min):
+def IL_LP(dt, pr, P, E, T_off, small_const):
     # N - the number of variables
     N = len(pr)
 
@@ -47,12 +47,12 @@ def IL_LP(dt, pr, P, E, T_off, P_min):
     # x_tmp - sub-vector of A_eq to obtain x value at each time step
     x_tmp = np.zeros((N, N), dtype=int)
     np.fill_diagonal(x_tmp, 1)
-    # z_tmp2 - sub-vector of A_eq to obtain (-z2 * Pmin - z3 * P) at each time step
+    # z_tmp2 - sub-vector of A_eq to obtain (-z2 * small_const - z3 * P) at each time step
     z_tmp2 = np.zeros((N, 3 * N), dtype=int)
     for i in range(N):
-        z_tmp2[i, i * 3 + 1] = -P_min
+        z_tmp2[i, i * 3 + 1] = -small_const
         z_tmp2[i, i * 3 + 2] = -P
-    # tmp2 - coefficient to satisfy equality constraint: x - z2 * P_min - z3 * P = 0
+    # tmp2 - coefficient to satisfy equality constraint: x - z2 * small_const - z3 * P = 0
     tmp2 = np.concatenate((x_tmp, np.zeros((N, N), dtype=int), z_tmp2), axis=1)
     # z_tmp3 - sub-vector of A_eq to obtain (z1 + z2 + z3) at each time step
     z_tmp3 = np.zeros((N, 3 * N), dtype=int)
@@ -64,7 +64,7 @@ def IL_LP(dt, pr, P, E, T_off, P_min):
     # b_eq - the vector for equality constraints
     b_eq = np.zeros((1, 1), dtype=int)
     b_eq[0, 0] = E / dt
-    # b_eq_tmp1 - sub-vector of b_eq to satisfy equality constraints: y - z2 - z3 = 0 and x - z2 * P_min - z3 * P = 0
+    # b_eq_tmp1 - sub-vector of b_eq to satisfy equality constraints: y - z2 - z3 = 0 and x - z2 * small_const - z3 * P = 0
     # b_eq_tmp2 - sub-vector of b_eq to satisfy equality constraints: z1 + z2 + z3 = 1
     b_eq_tmp1 = np.zeros((2 * N, 1), dtype=int)
     b_eq_tmp2 = np.ones((N, 1), dtype=int)
