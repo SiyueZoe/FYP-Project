@@ -5,13 +5,14 @@
 #       P - the power rate [scalar]
 #       E - the energy [scalar]
 #       T_off - the minimum off time [scalar]
+#       small_const - small constant used in connecting three z variables
 # Output:
 #       F - the value of objective function [scalar]
 #       x - the optimal schedule [array with shape 5 * (e-b+1,)]
 from gurobipy import *
 
 
-def IL_MILP(dt, pr, P, E, T_off, P_min):
+def IL_MILP(dt, pr, P, E, T_off, small_const):
     # N - the number of time step
     N = len(pr)
     # x - list of variables
@@ -48,7 +49,7 @@ def IL_MILP(dt, pr, P, E, T_off, P_min):
     # Constraint(3): connection between x and y
     for i in range(N):
         m.addConstr(x[i + N] == x[2 * N + 3 * i + 1] + x[2 * N + 3 * i + 2])
-        m.addConstr(x[i] == P_min * x[2 * N + 3 * i + 1] + P * x[2 * N + 3 * i + 2])
+        m.addConstr(x[i] == small_const * x[2 * N + 3 * i + 1] + P * x[2 * N + 3 * i + 2])
         m.addConstr(x[2 * N + 3 * i] + x[2 * N + 3 * i + 1] + x[2 * N + 3 * i + 2] == 1)
 
     # Optimize
