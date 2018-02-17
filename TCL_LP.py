@@ -26,13 +26,13 @@ def TCL_LP(dt, pr, P, c_water, m, temp_up, temp_o, temp_req, temp_en, di):
     c = dt * pr
     ### Inequality Constraints
     # x_tmp - to get the first i-s accumulated energy
-    x_tmp = dt * np.ones((N, N), dtype=int)
+    x_tmp = dt * np.ones((N, N))
     x_tmp = np.tril(x_tmp, 0)
     # x_tmp2 - opposite sign of x_tmp
     x_tmp2 = -1 * x_tmp
     A_ub = np.concatenate((x_tmp, x_tmp2))
     # ub - to obtain the power value
-    ub = np.eye(N, dtype=int)
+    ub = np.eye(N)
     # lb - opposite sign of ub
     lb = -1 * ub
     # A_ub - coefficient in inequality A_ub * x <= b_ub
@@ -41,14 +41,14 @@ def TCL_LP(dt, pr, P, c_water, m, temp_up, temp_o, temp_req, temp_en, di):
     C = np.zeros(N)
     for i in range(N):
         C[i] = di[i] * c_water * (temp_req - temp_en[i])
-    b_ub = np.zeros((2 * N, 1), dtype=int)
+    b_ub = np.zeros((2 * N, 1))
     for i in range(N):
         # b_ub[i, 0] - lower bound of energy accumulated at each time step
         b_ub[i, 0] = sum(C[0:i + 1]) + m * c_water * (temp_up - temp_o)
         # b_ub[i + N, 0] - upper bound of energy accumulated at each time step
         b_ub[i + N, 0] = -1 * sum(C[0:i + 1])
     # b_tmp - upper bound and then lower bound for power value at each time step
-    b_tmp = np.zeros((2 * N, 1), dtype=int)
+    b_tmp = np.zeros((2 * N, 1))
     b_tmp[0:N] = P
     # b_ub - value in inequality A_ub * x <= b_ub
     b_ub = np.concatenate((b_ub, b_tmp))
