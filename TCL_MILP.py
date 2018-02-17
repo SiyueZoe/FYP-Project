@@ -1,3 +1,4 @@
+
 # TCL_MILP - the MILP solution for Thermostatically Controlled Loads
 # Input:
 #       dt - the time step [scalar]
@@ -44,7 +45,7 @@ def TCL_MILP(dt, pr, P, c_water, m, temp_up, temp_o, temp_req, temp_en, di):
 
     # Add constraints
     for i in range(1, N + 1):
-        m.addConstr(sum(C[j] for j in range(i)) <= dt * sum(x[j] for j in range(i)))
+        m.addConstr(dt * sum(x[j] for j in range(i)) >= sum(C[j] for j in range(i)))
         m.addConstr(dt * sum(x[j] for j in range(i)) <= C_limit + sum(C[j] for j in range(i)))
 
     # Optimize
