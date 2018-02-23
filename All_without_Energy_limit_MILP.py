@@ -22,8 +22,10 @@
 #       di - demand of hot water drawn during i-th time step [array]
 
 # Output:
-#       F - the value of objective function [scalar]
-#       x - the optimal schedule [array with shape (e-b+1,)]
+#       result[7 * N] - the value of objective function [scalar]
+#       P_NL * result[0:N] - the optimal schedule for NL [array]
+#       result[N:2 * N] - the optimal schedule for IL [array]
+#       result[6 * N:7 * N] - the optimal schedule for TCL [array]
 
 from gurobipy import *
 import numpy as np
