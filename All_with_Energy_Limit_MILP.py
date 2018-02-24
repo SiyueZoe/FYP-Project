@@ -1,4 +1,4 @@
-# All_Types - the MILP solution for Three types of loads with energy limit
+# All_with_Energy_Limit_MILP - the MILP solution for Three types of loads with energy limit
 # Input:
 #   For All:
 #       dt - the time step [scalar]
