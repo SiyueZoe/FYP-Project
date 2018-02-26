@@ -74,7 +74,7 @@ def All_with_Power_Limit_MILP(dt, pr, P_limit, L, P_NL, P_IL, E_IL, T_off, Pmin,
     m.setObjective(dt * sum(pr[i] * (P_NL * x[i] + x[i + N] + x[i + 6 * N]) for i in range(N)), GRB.MINIMIZE)
 
     ## Add constraints
-    # All
+    # All:
     # Power limit at each time step
     for i in range(N):
         m.addConstr(P_NL * x[i] + x[i + N] + x[i + 6 * N] <= P_limit[i])
