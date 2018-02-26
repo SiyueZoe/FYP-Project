@@ -3,7 +3,7 @@
 #   For All:
 #       dt - the time step [scalar]
 #       pr - the array of prices from the first to the last [array]
-#       P_limit - the array of power limit for all types of loads at each time step
+#       P_limit - the array of power limit for all types of loads at each time step [array]
 #   For NL:
 #       L - the duration of the task [scalar]
 #       P_NL - the power rate[scalar]
@@ -23,10 +23,10 @@
 #       di - demand of hot water drawn during i-th time step [array]
 
 # Output:
-#       result[7 * N] - the value of objective function [scalar]
+#       m.objVal - the value of objective function [scalar]
 #       P_NL * result[0:N] - the optimal schedule for NL [array]
 #       result[N:2 * N] - the optimal schedule for IL [array]
-#       m.objVal - the optimal schedule for TCL [array]
+#       result[6 * N: 7 * N] - the optimal schedule for TCL [array]
 
 from gurobipy import *
 import numpy as np
@@ -74,7 +74,7 @@ def All_with_Power_Limit_MILP(dt, pr, P_limit, L, P_NL, P_IL, E_IL, T_off, Pmin,
     m.setObjective(dt * sum(pr[i] * (P_NL * x[i] + x[i + N] + x[i + 6 * N]) for i in range(N)), GRB.MINIMIZE)
 
     ## Add constraints
-    # All:
+    # All
     # Power limit at each time step
     for i in range(N):
         m.addConstr(P_NL * x[i] + x[i + N] + x[i + 6 * N] <= P_limit[i])
