@@ -183,3 +183,4 @@ def All_MILP(pr, dt, Energy_DR, DR_b, DR_e, L, P_NL, NL_b, NL_e, P_IL, E_IL, T_o
         print('IL (%d): ' % (i + 1), result[N * N_NL + i * 5 * N:N * N_NL + (i * 5 + 1) * N])
     for i in range(N_TCL):
         print('TCL (%d): ' % (i + 1), result[N * (N_NL + 5 * N_IL) + i * N:N * (N_NL + 5 * N_IL) + (i + 1) * N])
+    return result
