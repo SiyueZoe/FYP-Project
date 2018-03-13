@@ -27,6 +27,7 @@ def price():
     price[126:132] = 14.8
     price[132:138] = 5.8
     price[138:144] = 7
-
+    
+    # Convert unit from $/MWh to $/kWmin
     price /= 60000
     return price
