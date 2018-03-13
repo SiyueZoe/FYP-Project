@@ -118,7 +118,7 @@ def All_MILP(pr, dt, Energy_DR, DR_b, DR_e, L, P_NL, NL_b, NL_e, P_IL, E_IL, T_o
     m.update()
 
     ## Set objective
-    m.setObjective(sum(x[i] * pr2[i] for i in range(N * N_all)), GRB.MINIMIZE)
+    m.setObjective(sum(dt * x[i] * pr2[i] for i in range(N * N_all)), GRB.MINIMIZE)
 
     ## Add constraints
     # All:
