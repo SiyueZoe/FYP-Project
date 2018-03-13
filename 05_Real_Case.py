@@ -1,4 +1,4 @@
-# Real_Case - the MILP solution for scheduling 1 apartment with 10 residences in 24 hours
+# Real_Case - the MILP solution with all constraints (DR included) 
 # Input:
 #   For All:
 #       dt - the time step [scalar]
@@ -170,14 +170,24 @@ def Real_Case(pr, N, dt, DR, DR_b, DR_e, L, P_NL, NL_b, NL_e, P_IL, E_IL, T_off,
 
     ## Display
     result = []
+    result_NL = np.zeros(N)
+    result_IL = np.zeros(N)
+    result_TCL = np.zeros(N)
+    result_ALL = np.zeros(N)
     for v in m.getVars():
         result.append(v.x)
     result = np.asarray(result)
     print('Total Cost: ', m.objVal)
     print('*****************Result*****************')
     for i in range(N_NL):
+        result_NL += P_NL[i] * result[i * N: (i + 1) * N]
         print('NL (%d): ' % (i + 1), P_NL[i] * result[i * N: (i + 1) * N])
     for i in range(N_IL):
+        result_IL += result[N * N_NL + i * 5 * N:N * N_NL + (i * 5 + 1) * N]
         print('IL (%d): ' % (i + 1), result[N * N_NL + i * 5 * N:N * N_NL + (i * 5 + 1) * N])
     for i in range(N_TCL):
+        result_TCL += result[N * (N_NL + 5 * N_IL) + i * N:N * (N_NL + 5 * N_IL) + (i + 1) * N]
         print('TCL (%d): ' % (i + 1), result[N * (N_NL + 5 * N_IL) + i * N:N * (N_NL + 5 * N_IL) + (i + 1) * N])
+    result_ALL += result_NL + result_IL + result_TCL
+    
+    return result_NL, result_IL, result_TCL, result_ALL 
