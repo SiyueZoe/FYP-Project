@@ -6,21 +6,19 @@
 #       DR - demand response with unit of kW*min [scalar]
 #       DR_b - the beginning time of demand response [scalar]
 #       DR_e - the ending time of demand response [scalar]
-#       Residence - the number of residence in one apartment
-#       epsilon - extremely small number to help obtain proper di
-#   For NL: (1. Clothes Washer; 2. Clothes Dryer; 3. Dishwasher)
+#   For NL:
 #       L - the duration of the task [array]
 #       P_NL - the power rate[array]
 #       NL_b - the beginning time [array]
 #       NL_e - the ending time [array]
-#   For IL(with EM): (1. AC)
+#   For IL(with EM):
 #       P_IL - the power rate [array]
 #       E_IL - the energy [array]
 #       T_off - the minimum length of off time-step [array]
 #       Pmin - minimum power to turn on the appliance [array]
 #       IL_b - the beginning time [array]
 #       IL_e - the ending time [array]
-#   For TCL: (1. Water Heater)
+#   For TCL:
 #       P_TCL - the power rate [array]
 #       c_water - specific heat of water(kW min/gallon°C) [scalar]
 #       m - mass of water in full storage [array]
@@ -76,7 +74,7 @@ def Real_Case(pr, N, dt, DR, DR_b, DR_e, L, P_NL, NL_b, NL_e, P_IL, E_IL, T_off,
     # 3) pr2 Expanded for TCL
     tmp_TCL = np.tile(pr, N_TCL)
     pr2 = np.concatenate((pr2, tmp_IL, tmp_TCL))
-    # DR_vector - array to help obtain total energy of all appliances within demand response time
+    # DR_vector - array to help obtain total power of all appliances within demand response time
     DR_vector = np.zeros(N_all * N)
     # NL part in DR_vector
     for i in range(N_NL):
@@ -123,7 +121,7 @@ def Real_Case(pr, N, dt, DR, DR_b, DR_e, L, P_NL, NL_b, NL_e, P_IL, E_IL, T_off,
     ## Add constraints
     # All:
     # Demand Response
-    m.addConstr(sum(x[i] * DR_vector[i] for i in range(N * N_all)) <= DR)
+    m.addConstr(sum(dt * x[i] * DR_vector[i] for i in range(N * N_all)) <= DR)
     # NL:
     for i in range(N_NL):
         # Constraint(1): Guarantee the non-interruptibility
