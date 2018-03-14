@@ -119,7 +119,7 @@ def Real_Case(pr, N, dt, DR, DR_b, DR_e, L, P_NL, NL_b, NL_e, P_IL, E_IL, T_off,
     ## Constraints
     # All:
     # Demand Response
-    sum(x[i] * DR_vector[i] for i in range(N * N_all)) <= DR
+    sum(dt * x[i] * DR_vector[i] for i in range(N * N_all)) <= DR
     # NL:
     for i in range(N_NL):
         # Constraint(1): Guarantee the non-interruptibility
