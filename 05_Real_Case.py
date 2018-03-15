@@ -30,9 +30,11 @@
 
 # Output:
 #       m.objVal - the value of objective function [scalar]
-#       P_NL * result[0:N] - the optimal schedule for NL [array]
-#       result[N:2 * N] - the optimal schedule for IL [array]
-#       result[6 * N: 7 * N] - the optimal schedule for TCL [array]
+#       result_NL - the optimal schedule of all NL [array]
+#       result_IL - the optimal schedule of all IL [array]
+#       result_TCL - the optimal schedule of all TCL [array]
+#       result_ALL - the total power consumption at each time step [array]
+
 
 from gurobipy import *
 import numpy as np
