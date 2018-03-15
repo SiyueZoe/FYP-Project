@@ -29,6 +29,11 @@
 #       di - demand of hot water drawn during i-th time step [array]
 
 # Output:
+#       vobj() - the value of objective function [scalar]
+#       result_NL - the optimal schedule of all NL [array]
+#       result_IL - the optimal schedule of all IL [array]
+#       result_TCL - the optimal schedule of all TCL [array]
+#       result_ALL - the total power consumption at each time step [array]
 
 
 from pymprog import *
