@@ -1,3 +1,4 @@
+# This real-time price is taken from the paper and it has one and only one range with the obviously lowest price.
 import numpy as np
 
 def price():
