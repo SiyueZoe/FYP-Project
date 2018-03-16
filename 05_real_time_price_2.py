@@ -1,3 +1,4 @@
+# This real-time price is modified from the one in the paper. This has two time ranges with similar lowest price.
 import numpy as np
 
 def price():
