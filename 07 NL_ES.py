@@ -38,4 +38,5 @@ def NL_ES(dt, pr, L, P_NL, NL_b, NL_e):
         for i in range(int(start[m]), int(start[m] + L[m])):
             result_NL[m][i] = P_NL[m]
     total_NL = np.sum(result_NL, axis=0)
+    
     return np.sum(total_cost), result_NL, total_NL
